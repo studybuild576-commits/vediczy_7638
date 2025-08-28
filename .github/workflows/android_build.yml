@@ -1,0 +1,46 @@
+name: Flutter Android Build & SHA-1 Key
+
+# यह workflow तब चलेगा जब main branch में कोई नया commit push होगा
+on:
+  push:
+    branches:
+      - main
+
+# job define karein
+jobs:
+  build:
+    # is job ko ubuntu-latest environment mein chalayein
+    runs-on: ubuntu-latest
+
+    steps:
+      # repository ke code ko checkout karein
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      # Flutter SDK set up karein
+      - name: Setup Flutter SDK
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.x.x' # yahan Flutter version likhein
+
+      # project ke dependencies download karein
+      - name: Install Flutter Dependencies
+        run: flutter pub get
+
+      # debug APK build karein
+      - name: Build Android APK
+        run: flutter build apk --debug
+
+      # SHA-1 key nikalein
+      - name: Get APK SHA-1 Key
+        run: |
+          # Android default debug keystore se SHA-1 fingerprin nikaalein
+          # iske liye 'keytool' utility ka upyog karein
+          keytool -list -v -keystore ~/.android/debug.keystore -alias androiddebugkey -storepass android -keypass android
+
+      # banaye gaye APK ko artifact ke roop mein save karein
+      - name: Upload APK as an Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: debug-apk
+          path: build/app/outputs/flutter-apk/app-debug.apk
