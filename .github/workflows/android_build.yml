@@ -1,4 +1,4 @@
-name: Build Flutter APK
+name: Flutter Android Build
 
 on:
   push:
@@ -13,34 +13,34 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. Checkout full git history (important for versioning & git dependencies)
-      - name: Checkout code
+      # 1. Checkout source code
+      - name: Checkout repository
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          submodules: true
 
-      # 2. Set up Flutter
+      # 2. Install Flutter (automatic download, no submodule needed)
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.24.3' # Latest stable version
+          channel: stable
+          flutter-version: '3.24.3' # yaha apna required version likho
 
       # 3. Install dependencies
       - name: Install dependencies
         run: flutter pub get
 
-      # 4. Run tests (optional)
+      # 4. (Optional) Run tests
       - name: Run tests
         run: flutter test || true
 
-      # 5. Build APK
+      # 5. Build release APK
       - name: Build release APK
         run: flutter build apk --release
 
-      # 6. Upload APK as artifact (v4)
+      # 6. Upload generated APK as artifact
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: app-release-apk
+          name: app-release
           path: build/app/outputs/flutter-apk/app-release.apk
