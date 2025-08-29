@@ -1,9 +1,10 @@
-name: Flutter APK Build
+name: Build Flutter APK
 
 on:
   push:
     branches:
-      - main   # ya jo bhi branch tum chahte ho
+      - main
+      - master
   pull_request:
 
 jobs:
@@ -12,23 +13,34 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # 1. Checkout full git history (important for versioning & git dependencies)
       - name: Checkout code
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          submodules: true
 
-      - name: Install Flutter
+      # 2. Set up Flutter
+      - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.29.2' # Tumhara required flutter version
-          channel: 'stable'
+          flutter-version: '3.10.0' # Apna dart/flutter version yahan set karo
 
-      - name: Flutter Pub Get
+      # 3. Install dependencies
+      - name: Install dependencies
         run: flutter pub get
 
-      - name: Build APK (Release)
+      # 4. Run tests (optional, hata sakte ho agar zarurat nahi)
+      - name: Run tests
+        run: flutter test || true
+
+      # 5. Build APK
+      - name: Build release APK
         run: flutter build apk --release
 
-      - name: Upload APK Artifact
-        uses: actions/upload-artifact@v4
+      # 6. Upload APK as artifact
+      - name: Upload APK
+        uses: actions/upload-artifact@v3
         with:
           name: app-release-apk
           path: build/app/outputs/flutter-apk/app-release.apk
