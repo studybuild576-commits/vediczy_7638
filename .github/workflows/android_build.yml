@@ -17,7 +17,7 @@ jobs:
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.29.2' # Ya phir tumhare pubspec.yaml ke hisaab se
+          flutter-version: '3.29.2' # Tumhare version ke hisaab se
 
       - name: Flutter version
         run: flutter --version
@@ -25,6 +25,20 @@ jobs:
       - name: Dart version
         run: dart --version
 
+      - name: Install Android SDK
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y wget unzip openjdk-17-jdk
+          wget https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip -O cmdline-tools.zip
+          mkdir -p $HOME/android-sdk/cmdline-tools
+          unzip cmdline-tools.zip -d $HOME/android-sdk/cmdline-tools
+          export ANDROID_SDK_ROOT=$HOME/android-sdk
+          export PATH=$ANDROID_SDK_ROOT/cmdline-tools/cmdline-tools/bin:$ANDROID_SDK_ROOT/platform-tools:$PATH
+          yes | $ANDROID_SDK_ROOT/cmdline-tools/cmdline-tools/bin/sdkmanager --licenses
+          $ANDROID_SDK_ROOT/cmdline-tools/cmdline-tools/bin/sdkmanager "platform-tools" "platforms;android-34"
+
       - name: Android SDK version
         run: |
-          sdkmanager --list | head -n 20 || echo "Android SDK not fully available in this runner"
+          export ANDROID_SDK_ROOT=$HOME/android-sdk
+          export PATH=$ANDROID_SDK_ROOT/cmdline-tools/cmdline-tools/bin:$ANDROID_SDK_ROOT/platform-tools:$PATH
+          sdkmanager --list | head -n 20
