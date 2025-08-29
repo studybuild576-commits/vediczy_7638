@@ -4,7 +4,7 @@ publish_to: none
 version: 1.0.0+1
 
 environment:
-  sdk: ^3.6.0
+  sdk: ">=3.5.0 <4.0.0" # Updated for Dart 3.5.3 compatibility
 
 dependencies:
   flutter:       # CRITICAL: Required for every Flutter project - DO NOT REMOVE
@@ -29,8 +29,8 @@ dependencies:
   permission_handler: ^11.1.0
   record: ^6.0.0
   path_provider: ^2.1.2
-
   universal_html: ^2.2.4
+
 dev_dependencies:
   flutter_test:    # CRITICAL: Required for Flutter project testing - DO NOT REMOVE
     sdk: flutter   # CRITICAL: Required for Flutter project testing - DO NOT REMOVE
