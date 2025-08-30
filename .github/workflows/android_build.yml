@@ -16,7 +16,8 @@ jobs:
     - name: Set up JDK
       uses: actions/setup-java@v2
       with:
-        java-version: '11'
+        java-version: '11'  # You can change this to your desired version.
+        distribution: 'adoptopenjdk'  # or 'zulu', 'openjdk', etc.
 
     - name: Generate SHA1 Key
       run: |
