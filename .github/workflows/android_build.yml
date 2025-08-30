@@ -14,10 +14,10 @@ jobs:
       uses: actions/checkout@v2
 
     - name: Set up JDK
-      uses: actions/setup-java@v2
+      uses: actions/setup-java@v4
       with:
         java-version: '11'  # You can change this to your desired version.
-        distribution: 'adoptopenjdk'  # or 'zulu', 'openjdk', etc.
+        distribution: 'temurin'  # Use 'temurin' instead of 'adoptopenjdk'.
 
     - name: Generate SHA1 Key
       run: |
