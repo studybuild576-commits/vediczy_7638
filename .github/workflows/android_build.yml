@@ -1,4 +1,4 @@
-name: Generate SHA-1 Key
+name: Android Build and SHA1 Key
 
 on:
   push:
@@ -6,18 +6,19 @@ on:
       - main
 
 jobs:
-  generate-sha1:
+  build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+    - name: Checkout repository
+      uses: actions/checkout@v2
 
-      - name: Generate SHA-1 key from a file (e.g. README.md)
-        id: sha1
-        run: |
-          sha1=$(sha1sum README.md | awk '{ print $1 }')
-          echo "SHA-1 Key: $sha1"
-          echo "sha1=$sha1" >> $GITHUB_ENV
+    - name: Set up JDK
+      uses: actions/setup-java@v2
+      with:
+        java-version: '11'
 
-      - name: Copy SHA-1 Key
+    - name: Generate SHA1 Key
+      run: |
+        keytool -list -v -keystore android/app/debug.keystore -alias androiddebugkey -storepass android -keypass android
+      shell: bash
