@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:sizer/sizer.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import '../core/app_export.dart';
 import '../widgets/custom_error_widget.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  
+  // Firebase ko initialize karein
+  await Firebase.initializeApp();
 
   bool _hasShownError = false;
 
@@ -55,9 +60,76 @@ class MyApp extends StatelessWidget {
         },
         // 🚨 END CRITICAL SECTION
         debugShowCheckedModeBanner: false,
-        routes: AppRoutes.routes,
-        initialRoute: AppRoutes.initial,
+        // Authentication state ke hisaab se screen dikhane ke liye
+        home: StreamBuilder<User?>(
+          stream: FirebaseAuth.instance.authStateChanges(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Center(child: CircularProgressIndicator());
+            }
+            if (snapshot.hasData) {
+              // Agar user logged in hai, to home screen dikhao
+              return HomeScreen();
+            } else {
+              // Agar user logged in nahi hai, to login screen dikhao
+              return LoginScreen();
+            }
+          },
+        ),
       );
     });
+  }
+}
+
+class LoginScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('Login')),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text('Login to continue', style: TextStyle(fontSize: 24)),
+            SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () async {
+                try {
+                  // Test ke liye, anonymous login use kiya gaya hai
+                  await FirebaseAuth.instance.signInAnonymously();
+                } catch (e) {
+                  print(e);
+                }
+              },
+              child: Text('Log In Anonymously'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class HomeScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('Home')),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text('Welcome!', style: TextStyle(fontSize: 24)),
+            SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () async {
+                await FirebaseAuth.instance.signOut();
+              },
+              child: Text('Log Out'),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
