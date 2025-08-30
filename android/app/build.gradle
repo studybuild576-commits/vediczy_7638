@@ -9,7 +9,7 @@ plugins {
 
 android {
     namespace "com.vediczy.app"
-    compileSdk 35 // Fixed version to avoid null errors
+    compileSdk 36 // Fixed version to avoid null errors
 
     ndkVersion = flutter.ndkVersion
 
