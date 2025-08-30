@@ -3,6 +3,8 @@ plugins {
     id "kotlin-android"
     // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
     id "dev.flutter.flutter-gradle-plugin"
+    // Is line ko add karein
+    id 'com.google.gms.google-services'
 }
 
 android {
@@ -45,4 +47,12 @@ flutter {
 dependencies {
     implementation "androidx.multidex:multidex:2.0.1"
     implementation "com.google.android.material:material:1.9.0"
+
+    // Firebase Bill of Materials (BOM) ko import karein
+    implementation platform('com.google.firebase:firebase-bom:33.1.2')
+
+    // Jo bhi services aapko chahiye unki dependencies yahan add karein
+    implementation 'com.google.firebase:firebase-analytics'
+    implementation 'com.google.firebase:firebase-auth'
+    implementation 'com.google.firebase:firebase-firestore'
 }
