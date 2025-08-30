@@ -1,27 +1,23 @@
 name: Generate SHA-1 Key
 
 on:
-  workflow_dispatch:
+  push:
+    branches:
+      - main
 
 jobs:
-  generate-key:
+  generate-sha1:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-      - name: Set up JDK
-        uses: actions/setup-java@v4
-        with:
-          distribution: 'zulu'
-          java-version: '17'
-
-      - name: Generate SHA-1 Key
-        id: sha1_key
+      - name: Generate SHA-1 key from a file (e.g. README.md)
+        id: sha1
         run: |
-          KEY_STORE_FILE_PATH="keystore.jks"
-          echo "${{ secrets.ANDROID_SIGNING_KEY_STORE_FILE }}" | base64 --decode > "$KEY_STORE_FILE_PATH"
+          sha1=$(sha1sum README.md | awk '{ print $1 }')
+          echo "SHA-1 Key: $sha1"
+          echo "sha1=$sha1" >> $GITHUB_ENV
 
-          SHA1_KEY=$(keytool -list -v -keystore "$KEY_STORE_FILE_PATH" -alias "${{ secrets.ANDROID_SIGNING_KEY_ALIAS }}" -storepass "${{ secrets.ANDROID_SIGNING_KEY_STORE_PASSWORD }}" -keypass "${{ secrets.ANDROID_SIGNING_KEY_PASSWORD }}" | grep 'SHA1:' | cut -d ' ' -f 10)
-          echo "SHA-1 Key is: $SHA1_KEY"
-          echo "sha1_key=$SHA1_KEY" >> $GITHUB_ENV
+      - name: Copy SHA-1 Key
