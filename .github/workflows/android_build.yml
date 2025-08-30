@@ -1,46 +1,27 @@
-name: Flutter Android Build
+name: Generate SHA-1 Key
 
 on:
-  push:
-    branches:
-      - main
-      - master
-  pull_request:
+  workflow_dispatch:
 
 jobs:
-  build:
-    name: Build Flutter APK
+  generate-key:
     runs-on: ubuntu-latest
-
     steps:
-      # 1. Checkout source code
-      - name: Checkout repository
+      - name: Checkout Code
         uses: actions/checkout@v4
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
         with:
-          fetch-depth: 0
+          distribution: 'zulu'
+          java-version: '17'
 
-      # 2. Install Flutter (automatic download, no submodule needed)
-      - name: Set up Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          channel: stable
-          flutter-version: '3.24.3' # yaha apna required version likho
+      - name: Generate SHA-1 Key
+        id: sha1_key
+        run: |
+          KEY_STORE_FILE_PATH="keystore.jks"
+          echo "${{ secrets.ANDROID_SIGNING_KEY_STORE_FILE }}" | base64 --decode > "$KEY_STORE_FILE_PATH"
 
-      # 3. Install dependencies
-      - name: Install dependencies
-        run: flutter pub get
-
-      # 4. (Optional) Run tests
-      - name: Run tests
-        run: flutter test || true
-
-      # 5. Build release APK
-      - name: Build release APK
-        run: flutter build apk --release
-
-      # 6. Upload generated APK as artifact
-      - name: Upload APK
-        uses: actions/upload-artifact@v4
-        with:
-          name: app-release
-          path: build/app/outputs/flutter-apk/app-release.apk
+          SHA1_KEY=$(keytool -list -v -keystore "$KEY_STORE_FILE_PATH" -alias "${{ secrets.ANDROID_SIGNING_KEY_ALIAS }}" -storepass "${{ secrets.ANDROID_SIGNING_KEY_STORE_PASSWORD }}" -keypass "${{ secrets.ANDROID_SIGNING_KEY_PASSWORD }}" | grep 'SHA1:' | cut -d ' ' -f 10)
+          echo "SHA-1 Key is: $SHA1_KEY"
+          echo "sha1_key=$SHA1_KEY" >> $GITHUB_ENV
