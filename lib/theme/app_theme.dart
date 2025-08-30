@@ -96,7 +96,7 @@ class AppTheme {
       onSecondaryContainer: onSecondaryLight,
       tertiary: accentLight,
       onTertiary: Color(0xFF000000),
-      tertiaryContainer: accentLight.withValues(alpha: 0.1),
+      tertiaryContainer: accentLight.withOpacity(0.1),
       onTertiaryContainer: Color(0xFF000000),
       error: errorLight,
       onError: onErrorLight,
@@ -104,7 +104,7 @@ class AppTheme {
       onSurface: onSurfaceLight,
       onSurfaceVariant: textSecondaryLight,
       outline: dividerLight,
-      outlineVariant: dividerLight.withValues(alpha: 0.5),
+      outlineVariant: dividerLight.withOpacity(0.5),
       shadow: shadowLight,
       scrim: shadowLight,
       inverseSurface: surfaceDark,
@@ -132,7 +132,7 @@ class AppTheme {
     ),
 
     // Card theme with subtle elevation
-    cardTheme: CardTheme(
+    cardTheme: CardThemeData(
       color: cardLight,
       elevation: 2.0,
       shadowColor: shadowLight,
@@ -272,7 +272,7 @@ class AppTheme {
       }),
       trackColor: WidgetStateProperty.resolveWith((states) {
         if (states.contains(WidgetState.selected)) {
-          return primaryLight.withValues(alpha: 0.3);
+          return primaryLight.withOpacity(0.3);
         }
         return Colors.grey[300];
       }),
@@ -304,20 +304,20 @@ class AppTheme {
     // Progress indicator with semantic colors
     progressIndicatorTheme: ProgressIndicatorThemeData(
       color: primaryLight,
-      linearTrackColor: primaryLight.withValues(alpha: 0.2),
-      circularTrackColor: primaryLight.withValues(alpha: 0.2),
+      linearTrackColor: primaryLight.withOpacity(0.2),
+      circularTrackColor: primaryLight.withOpacity(0.2),
     ),
 
     sliderTheme: SliderThemeData(
       activeTrackColor: primaryLight,
       thumbColor: primaryLight,
-      overlayColor: primaryLight.withValues(alpha: 0.2),
-      inactiveTrackColor: primaryLight.withValues(alpha: 0.3),
+      overlayColor: primaryLight.withOpacity(0.2),
+      inactiveTrackColor: primaryLight.withOpacity(0.3),
       trackHeight: 4.0,
     ),
 
     // Tab bar theme for educational content
-    tabBarTheme: TabBarTheme(
+    tabBarTheme: TabBarThemeData(
       labelColor: primaryLight,
       unselectedLabelColor: textSecondaryLight,
       indicatorColor: primaryLight,
@@ -334,7 +334,7 @@ class AppTheme {
 
     tooltipTheme: TooltipThemeData(
       decoration: BoxDecoration(
-        color: textPrimaryLight.withValues(alpha: 0.9),
+        color: textPrimaryLight.withOpacity(0.9),
         borderRadius: BorderRadius.circular(6),
       ),
       textStyle: GoogleFonts.inter(
@@ -381,7 +381,8 @@ class AppTheme {
       color: dividerLight,
       thickness: 1,
       space: 1,
-    ), dialogTheme: DialogThemeData(backgroundColor: dialogLight),
+    ),
+    dialogTheme: DialogThemeData(backgroundColor: dialogLight),
   );
 
   /// Dark theme
@@ -399,7 +400,7 @@ class AppTheme {
       onSecondaryContainer: onSecondaryDark,
       tertiary: accentDark,
       onTertiary: Color(0xFF000000),
-      tertiaryContainer: accentDark.withValues(alpha: 0.1),
+      tertiaryContainer: accentDark.withOpacity(0.1),
       onTertiaryContainer: Color(0xFFFFFFFF),
       error: errorDark,
       onError: onErrorDark,
@@ -407,7 +408,7 @@ class AppTheme {
       onSurface: onSurfaceDark,
       onSurfaceVariant: textSecondaryDark,
       outline: dividerDark,
-      outlineVariant: dividerDark.withValues(alpha: 0.5),
+      outlineVariant: dividerDark.withOpacity(0.5),
       shadow: shadowDark,
       scrim: shadowDark,
       inverseSurface: surfaceLight,
@@ -431,7 +432,7 @@ class AppTheme {
       iconTheme: IconThemeData(color: textPrimaryDark),
       actionsIconTheme: IconThemeData(color: textPrimaryDark),
     ),
-    cardTheme: CardTheme(
+    cardTheme: CardThemeData(
       color: cardDark,
       elevation: 2.0,
       shadowColor: shadowDark,
@@ -557,7 +558,7 @@ class AppTheme {
       }),
       trackColor: WidgetStateProperty.resolveWith((states) {
         if (states.contains(WidgetState.selected)) {
-          return primaryDark.withValues(alpha: 0.3);
+          return primaryDark.withOpacity(0.3);
         }
         return Colors.grey[600];
       }),
@@ -585,17 +586,17 @@ class AppTheme {
     ),
     progressIndicatorTheme: ProgressIndicatorThemeData(
       color: primaryDark,
-      linearTrackColor: primaryDark.withValues(alpha: 0.2),
-      circularTrackColor: primaryDark.withValues(alpha: 0.2),
+      linearTrackColor: primaryDark.withOpacity(0.2),
+      circularTrackColor: primaryDark.withOpacity(0.2),
     ),
     sliderTheme: SliderThemeData(
       activeTrackColor: primaryDark,
       thumbColor: primaryDark,
-      overlayColor: primaryDark.withValues(alpha: 0.2),
-      inactiveTrackColor: primaryDark.withValues(alpha: 0.3),
+      overlayColor: primaryDark.withOpacity(0.2),
+      inactiveTrackColor: primaryDark.withOpacity(0.3),
       trackHeight: 4.0,
     ),
-    tabBarTheme: TabBarTheme(
+    tabBarTheme: TabBarThemeData(
       labelColor: primaryDark,
       unselectedLabelColor: textSecondaryDark,
       indicatorColor: primaryDark,
@@ -611,7 +612,7 @@ class AppTheme {
     ),
     tooltipTheme: TooltipThemeData(
       decoration: BoxDecoration(
-        color: textPrimaryDark.withValues(alpha: 0.9),
+        color: textPrimaryDark.withOpacity(0.9),
         borderRadius: BorderRadius.circular(6),
       ),
       textStyle: GoogleFonts.inter(
@@ -653,7 +654,8 @@ class AppTheme {
       color: dividerDark,
       thickness: 1,
       space: 1,
-    ), dialogTheme: DialogThemeData(backgroundColor: dialogDark),
+    ),
+    dialogTheme: DialogThemeData(backgroundColor: dialogDark),
   );
 
   /// Helper method to build text theme based on brightness
